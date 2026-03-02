@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCD Smart Calculator</title>
+
+<style>
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#0f172a,#1e3a8a);
+font-family:Arial;
+}
+
+.calculator{
+width:100%;
+max-width:420px;
+height:100vh;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(20px);
+border-radius:30px;
+padding:20px;
+display:flex;
+flex-direction:column;
+}
+
+.title{
+color:white;
+text-align:center;
+margin-bottom:10px;
+}
+
+.display{
+color:white;
+font-size:36px;
+text-align:right;
+padding:15px;
+min-height:70px;
+word-wrap:break-word;
+}
+
+.buttons{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+}
+
+button{
+border:none;
+border-radius:50%;
+height:65px;
+font-size:18px;
+background:rgba(255,255,255,0.15);
+color:white;
+cursor:pointer;
+transition:0.2s;
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+.operator{background:#2563eb;}
+.equal{background:#22c55e;}
+.clear{background:#ef4444;}
+
+#history{
+display:none;
+flex:1;
+overflow-y:auto;
+color:white;
+font-size:14px;
+margin-bottom:10px;
+padding:10px;
+background:rgba(0,0,0,0.2);
+border-radius:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+
+<div class="title">MCD Smart Calculator</div>
+
+<div id="display" class="display">0</div>
+
+<button onclick="toggleHistory()" style="
+background:#1e40af;
+border-radius:20px;
+height:40px;
+margin-bottom:10px;
+width:100%;
+color:white;
+border:none;
+">Show / Hide History</button>
+
+<div id="history"></div>
+
+<div class="buttons">
+
+<button class="clear" onclick="clearDisplay()">C</button>
+<button onclick="backspace()">⌫</button>
+<button onclick="append('%')">%</button>
+<button class="operator" onclick="append('/')">÷</button>
+
+<button onclick="append('7')">7</button>
+<button onclick="append('8')">8</button>
+<button onclick="append('9')">9</button>
+<button class="operator" onclick="append('*')">×</button>
+
+<button onclick="append('4')">4</button>
+<button onclick="append('5')">5</button>
+<button onclick="append('6')">6</button>
+<button class="operator" onclick="append('-')">−</button>
+
+<button onclick="append('1')">1</button>
+<button onclick="append('2')">2</button>
+<button onclick="append('3')">3</button>
+<button class="operator" onclick="append('+')">+</button>
+
+<button style="grid-column:span 2" onclick="append('0')">0</button>
+<button onclick="append('.')">.</button>
+<button class="equal" onclick="calculate()">=</button>
+
+</div>
+</div>
+
+<script>
+
+let display=document.getElementById("display");
+let historyDiv=document.getElementById("history");
+let historyList=[];
+
+function append(value){
+if(display.innerText==="0"){
+display.innerText=value;
+}else{
+display.innerText+=value;
+}
+}
+
+function clearDisplay(){
+display.innerText="0";
+}
+
+function backspace(){
+display.innerText=display.innerText.slice(0,-1);
+if(display.innerText===""){
+display.innerText="0";
+}
+}
+
+function calculate(){
+try{
+let expression=display.innerText;
+let result=eval(expression);
+
+display.innerText=result;
+
+historyList.unshift(expression+" = "+result);
+updateHistory();
+
+}catch{
+display.innerText="Error";
+}
+}
+
+function updateHistory(){
+historyDiv.innerHTML="";
+historyList.forEach(item=>{
+let div=document.createElement("div");
+div.innerText=item;
+div.style.marginBottom="5px";
+historyDiv.appendChild(div);
+});
+}
+
+function toggleHistory(){
+historyDiv.style.display=
+historyDiv.style.display==="block" ? "none" : "block";
+}
+
+</script>
+
+</body>
+</html>
